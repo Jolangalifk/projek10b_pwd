@@ -66,6 +66,44 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+/* NIM: hanya huruf, angka, dan tanda '-' (sesuaikan pola kalau ada format khusus) */
+if (!preg_match('/^[A-Za-z0-9\-]+$/', $nim)) {
+    echo "NIM hanya boleh berisi huruf, angka, dan tanda '-' (tanpa spasi).";
+    exit;
+}
+
+/* Nama: hanya huruf (unicode), spasi, apostrof, dan tanda minus */
+if (!preg_match('/^[\p{L}\s\'\-]+$/u', $nama)) {
+    echo "Nama tidak valid — hanya huruf dan spasi yang diperbolehkan.";
+    exit;
+}
+
+/* No HP: cek minimal jumlah angka (hapus non-digit untuk pemeriksaan) */
+$hp_digits = preg_replace('/\D/', '', $no_hp);
+if ($hp_digits === '' || strlen($hp_digits) < 6) {
+    echo "Nomor HP tidak valid — masukkan minimal 6 angka.";
+    exit;
+}
+
+/* Umur: jangkauan wajar */
+if ($umur < 0 || $umur > 120) {
+    echo "Umur tidak valid.";
+    exit;
+}
+
+/* Tanggal lahir: jika diisi, pastikan valid (YYYY-MM-DD dan valid calendar date) */
+if ($tanggal_lahir !== '') {
+    if (!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $tanggal_lahir, $m)) {
+        echo "Format tanggal lahir tidak valid (harus YYYY-MM-DD).";
+        exit;
+    }
+    $y = (int)$m[1]; $mo = (int)$m[2]; $d = (int)$m[3];
+    if (!checkdate($mo, $d, $y)) {
+        echo "Tanggal lahir tidak valid.";
+        exit;
+    }
+}
+
 // Prepared statement untuk mencegah SQL injection
 $sql = "INSERT INTO mhs (nim, nama, no_hp, umur, tempat_lahir, tanggal_lahir, alamat, kota, jk, status, hobi, email)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
