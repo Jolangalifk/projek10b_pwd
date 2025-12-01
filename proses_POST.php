@@ -76,31 +76,354 @@ if (!$stmt) {
     exit;
 }
 
-mysqli_stmt_bind_param($stmt, "sssissssssss",
-    $nim, $nama, $no_hp, $umur, $tempat_lahir, $tanggal_lahir, $alamat, $kota, $jk, $status, $hobi, $email
+mysqli_stmt_bind_param(
+    $stmt,
+    "sssissssssss",
+    $nim,
+    $nama,
+    $no_hp,
+    $umur,
+    $tempat_lahir,
+    $tanggal_lahir,
+    $alamat,
+    $kota,
+    $jk,
+    $status,
+    $hobi,
+    $email
 );
 
 $exec = mysqli_stmt_execute($stmt);
 if ($exec) {
-    // Escape all output when showing back to the browser
-    echo "<h2>Data berhasil disimpan ke database!</h2>";
-    echo "<ul>";
-    echo "<li>NIM: " . htmlspecialchars($nim, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Nama: " . htmlspecialchars($nama, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>No HP: " . htmlspecialchars($no_hp, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Umur: " . htmlspecialchars((string)$umur, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Tempat Lahir: " . htmlspecialchars($tempat_lahir, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Tanggal Lahir: " . htmlspecialchars($tanggal_lahir, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Alamat: " . htmlspecialchars($alamat, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Kota: " . htmlspecialchars($kota, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Jenis Kelamin: " . htmlspecialchars($jk, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Status: " . htmlspecialchars($status, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Hobi: " . htmlspecialchars($hobi, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "<li>Email: " . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . "</li>";
-    echo "</ul>";
-    echo "<p><a href=\"Form_POST.php\">Kembali ke form</a></p>";
+?>
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Berhasil Disimpan</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .container {
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                max-width: 600px;
+                width: 100%;
+                overflow: hidden;
+                animation: slideUp 0.5s ease-out;
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .header h2 {
+                font-size: 24px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .success-icon {
+                font-size: 48px;
+                margin-bottom: 10px;
+                animation: scaleIn 0.5s ease-out 0.2s both;
+            }
+
+            @keyframes scaleIn {
+                from {
+                    transform: scale(0);
+                }
+
+                to {
+                    transform: scale(1);
+                }
+            }
+
+            .content {
+                padding: 30px;
+            }
+
+            .data-list {
+                list-style: none;
+            }
+
+            .data-item {
+                padding: 15px;
+                margin-bottom: 10px;
+                background: #f8f9fa;
+                border-radius: 10px;
+                border-left: 4px solid #667eea;
+                transition: all 0.3s ease;
+            }
+
+            .data-item:hover {
+                background: #e9ecef;
+                transform: translateX(5px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .data-label {
+                font-weight: 600;
+                color: #495057;
+                font-size: 14px;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .data-value {
+                color: #212529;
+                font-size: 16px;
+            }
+
+            .footer {
+                padding: 20px 30px;
+                background: #f8f9fa;
+                text-align: center;
+            }
+
+            .btn-back {
+                display: inline-block;
+                padding: 12px 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 25px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+
+            .btn-back:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    border-radius: 15px;
+                }
+
+                .header {
+                    padding: 25px 20px;
+                }
+
+                .header h2 {
+                    font-size: 20px;
+                }
+
+                .content {
+                    padding: 20px;
+                }
+
+                .data-item {
+                    padding: 12px;
+                }
+
+                .data-label {
+                    font-size: 13px;
+                }
+
+                .data-value {
+                    font-size: 15px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                body {
+                    padding: 10px;
+                }
+
+                .header h2 {
+                    font-size: 18px;
+                }
+
+                .success-icon {
+                    font-size: 36px;
+                }
+
+                .content {
+                    padding: 15px;
+                }
+
+                .data-item {
+                    padding: 10px;
+                }
+
+                .btn-back {
+                    padding: 10px 25px;
+                    font-size: 14px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header">
+                <div class="success-icon">✓</div>
+                <h2>Data Berhasil Disimpan!</h2>
+            </div>
+
+            <div class="content">
+                <ul class="data-list">
+                    <li class="data-item">
+                        <span class="data-label">NIM</span>
+                        <span class="data-value"><?php echo htmlspecialchars($nim, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Nama</span>
+                        <span class="data-value"><?php echo htmlspecialchars($nama, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">No HP</span>
+                        <span class="data-value"><?php echo htmlspecialchars($no_hp, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Umur</span>
+                        <span class="data-value"><?php echo htmlspecialchars((string)$umur, ENT_QUOTES, 'UTF-8'); ?> tahun</span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Tempat Lahir</span>
+                        <span class="data-value"><?php echo htmlspecialchars($tempat_lahir, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Tanggal Lahir</span>
+                        <span class="data-value"><?php echo htmlspecialchars($tanggal_lahir, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Alamat</span>
+                        <span class="data-value"><?php echo htmlspecialchars($alamat, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Kota</span>
+                        <span class="data-value"><?php echo htmlspecialchars($kota, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Jenis Kelamin</span>
+                        <span class="data-value"><?php echo htmlspecialchars($jk, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Status</span>
+                        <span class="data-value"><?php echo htmlspecialchars($status, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Hobi</span>
+                        <span class="data-value"><?php echo htmlspecialchars($hobi, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                    <li class="data-item">
+                        <span class="data-label">Email</span>
+                        <span class="data-value"><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer">
+                <a href="Form_POST.php" class="btn-back">← Kembali ke Form</a>
+            </div>
+        </div>
+    </body>
+
+    </html>
+<?php
 } else {
-    echo "Insert gagal: " . mysqli_stmt_error($stmt);
+?>
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .error-container {
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-width: 500px;
+            }
+
+            .error-icon {
+                font-size: 48px;
+                color: #f5576c;
+            }
+
+            h2 {
+                color: #333;
+                margin: 20px 0;
+            }
+
+            p {
+                color: #666;
+                margin-bottom: 20px;
+            }
+
+            .btn-back {
+                display: inline-block;
+                padding: 12px 30px;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 25px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="error-container">
+            <div class="error-icon">✕</div>
+            <h2>Insert Gagal</h2>
+            <p><?php echo htmlspecialchars(mysqli_stmt_error($stmt), ENT_QUOTES, 'UTF-8'); ?></p>
+            <a href="Form_POST.php" class="btn-back">← Kembali ke Form</a>
+        </div>
+    </body>
+
+    </html>
+<?php
 }
 
 mysqli_stmt_close($stmt);
