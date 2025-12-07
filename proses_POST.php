@@ -66,9 +66,9 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-/* NIM: hanya huruf, angka, dan tanda '-' (sesuaikan pola kalau ada format khusus) */
-if (!preg_match('/^[A-Za-z0-9\-]+$/', $nim)) {
-    echo "NIM hanya boleh berisi huruf, angka, dan tanda '-' (tanpa spasi).";
+/* NIM: boleh huruf, angka, titik (.) dan tanda '-' (sesuaikan pola kalau ada format khusus) */
+if (!preg_match('/^[A-Za-z0-9.\-]+$/', $nim)) {
+    echo "NIM tidak valid — hanya huruf, angka, titik (.) dan tanda '-' yang diperbolehkan (tanpa spasi).";
     exit;
 }
 
